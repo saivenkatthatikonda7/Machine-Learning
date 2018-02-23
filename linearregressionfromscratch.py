@@ -26,18 +26,21 @@ df.fillna(-99999, inplace=True)
 forecast_out= int(math.ceil(0.01*len(df)))
 df['label'] = df[forecast_col].shift(-forecast_out)
 #df.dropna(inplace=True)
-print(df.head())
+#print(df.head)
 
 #X=np.array(df.drop(['label'] ,1) )
 #X=preprocessing.scale(X)
 #X_start=X[:-forecast_out]
 #X_lately=X[-forecast_out:]
-X=np.array(df['HL_PCT'])
+X=np.array(df['Adj. Close'])
 X=preprocessing.scale(X)
 X_single=X[:-forecast_out]
 X_lately=X[-forecast_out:]
 df.dropna(inplace=True)
 Y=np.array(df['label'])
+Y_lately=Y[-forecast_out:]
+print(len(X_single),len(Y_lately))
+
 #print(len(Y))
 #print(len(X_start))
 #y=np.array(df['label'])
@@ -68,11 +71,11 @@ def linear_regression(xs,ys):
 
 m,b=linear_regression(xs,ys)
 
-for x in X_test:
+for x in X_lately:
     predict_y=(m*x)+b
-    np.append(X_lately,predict_y)
-
-print(X_lately)
+    np.append(Y_lately,predict_y)
+#print(X_single)
+print(Y_lately)
 
 plt.scatter(xs,ys)
 
